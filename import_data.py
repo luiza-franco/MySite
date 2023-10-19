@@ -1,30 +1,18 @@
 import os
 import django
+import pandas as pd
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'mysite.settings')
 django.setup()
 
-import pandas as pd
-from polls.models import Question  # Certifique-se de importar a classe correta do seu modelo
+from polls.models import Question 
 
-# Substitua 'caminho/do/seu/arquivo.xlsx' pelo caminho real do seu arquivo Excel
-import os
-
-caminho_arquivo = 'C:/Users/luiza/Documents/mysite/polls'
-
-# Verificar se o caminho do arquivo é válido
-if caminho_arquivo:
-
-    df = pd.read_excel(caminho_arquivo)
-    dados = df.to_dict(orient='records')
-
-    import pandas as pd
-from polls.models import Question
-
-caminho_arquivo = 'mysite/polls/data/dados.xlsx'
+caminho_arquivo = 'C:\\Users\\luiza\\Documents\\mysite\\polls\\dados\\dados.xlsx'
 
 if caminho_arquivo:
-    df = pd.read_excel(caminho_arquivo)
+    df = pd.read_excel(caminho_arquivo, header=0)
+    colunas_de_interesse = ['km', 'km final', 'km de Projeto', 'km final de Projeto', 'Status', 'Equipe/Empreiteira', 'Encontrado em', 'Executado em', 'Prazo', 'Sentido', 'Classe', 'Faixa', 'Rodovia', 'Origem', 'Código ARTESP', 'Cód interno', 'Lote', 'Comprimento(m)', 'Largura(m)', 'Observações', 'Recurso_1', 'Quantidade_1', 'Recurso_2', 'Quantidade_2', 'Caminho']
+    df = df[colunas_de_interesse]
     dados = df.to_dict(orient='records')
     
     for dado in dados:
@@ -46,17 +34,16 @@ if caminho_arquivo:
             codigo_artesp=dado['Código ARTESP'],
             codigo_interno=dado['Cód interno'],
             lote=dado['Lote'],
-            comprimento=dado['Comprimento (m)'],
-            largura=dado['Largura (m)'],
+            comprimento=dado['Comprimento(m)'],
+            largura=dado['Largura(m)'],
             observacoes=dado['Observações'],
             recurso_1=dado['Recurso_1'],
             quantidade_1=dado['Quantidade_1'],
             recurso_2=dado['Recurso_2'],
             quantidade_2=dado['Quantidade_2'],
-            caminho=dado['caminho']
+            caminho=dado['Caminho']
         )
         nova_pergunta.save()
 
 else:
     print("Nenhum arquivo selecionado.")
-
